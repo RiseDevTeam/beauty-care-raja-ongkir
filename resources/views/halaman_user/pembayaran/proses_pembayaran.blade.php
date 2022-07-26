@@ -23,7 +23,8 @@
             <div class="post-ad-form">
                 <table class="table table-bordered">
                     <tr class="text-center">
-                        <td>LIST</td>
+                        <td>Harga Produk</td>
+                        <td>Ongkir</td>
                         <td>Total Pembayaran</td>
                     </tr>
                     <tr class="text-center">
@@ -37,14 +38,28 @@
                                 $grandtotal += $total;
                             @endphp
                         @endforeach
-                        <td>Total</td>
                         <td id="total_harga">Rp {{ number_format($grandtotal) }}</td>
+                        @php
+                            $ongkir = DB::table('daftar_ongkir_draf')
+                                ->where('id_user', Auth::User()->id)
+                                ->orderBy('id_daftar_ongkir', 'desc')
+                                ->first();
+                        @endphp
+                        <td>
+                            @if ($ongkir)
+                                Rp.{{ number_format($ongkir->value) }}
+                            @endif
+                        </td>
+                        <td>
+                            @if ($ongkir)
+                                Rp {{ number_format($grandtotal + $ongkir->value) }}
+                            @endif
+                        </td>
                     </tr>
                 </table>
                 <div class="personal-details" style="margin-bottom: 40px">
                     <form action="{{ route('cek_harga_ongkir') }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <input type="hidden" name="total_akhir" id="total_harga1" value="{{ $grandtotal }}">
                         <div class="clearfix"></div>
                         <div class="clearfix"></div>
                         <label>Pilih Provinsi <span>*</span></label>
@@ -74,6 +89,12 @@
                     </form>
                     <form action="{{ route('proses_checkout') }}" method="POST" enctype="multipart/form-data">
                         <label for="alamat">Alamat Lengkap <span>*</span></label>
+                        @csrf
+                        @if ($ongkir)
+                            <input type="hidden" name="total_akhir" id="total_harga1"
+                                value="{{ $grandtotal + $ongkir->value }}">
+                            <input type="hidden" value="{{ $ongkir->id_daftar_ongkir }}" name="id_daftar_ongkir">
+                        @endif
                         <div class="row form-group">
                             <div class="col-md-12">
                                 <textarea name="alamat" id="alamat" cols="30" rows="5" class="form-control" placeholder="Alamat Lengkap"></textarea>

@@ -34,11 +34,9 @@
                         <th>Alamat</th>
                         <th>Nama Barang</th>
                         <th>Harga Barang</th>
-                        <th>Jumlah Pembelian</th>
-                        <th>Nama Kurir</th>
-                        <th>Harga Ongkir</th>
-                        <th>Total</th>
-                        <th>Status</th>
+                        <th>Status Barang</th>
+                        <th>Status Penerimaan</th>
+                        <th>Detail Informasi</th>
                     </tr>
                     @foreach ($pembayaran as $p)
                         <tr class="text-center">
@@ -48,20 +46,27 @@
                             <td>{{ $p->alamat }}</td>
                             <td>{{ $p->nama_barang }}</td>
                             <td>Rp. {{ number_format($p->harga, 0, '.', '.') }}</td>
-                            <td>{{ $p->kuantiti }}</td>
-                            <td>{{ $p->nama_kurir }}</td>
-                            <td>{{ number_format($p->harga_kurir) }}</td>
-                            <td>Rp. {{ number_format($p->harga * $p->kuantiti, 0, '.', '.') }}</td>
-                            {{-- <td>Rp. {{ number_format($p->total_akhir, 0, '.', '.') }}</td> --}}
                             <td>
                                 @if ($p->status == 'pending')
-                                    Tunggu Konfirmasi Dari Admin
-                                @elseif($p->status == 'sampai')
-                                    {{ $p->status }}
+                                    {{ 'Barang Sedeng dikemas' }}
+                                @elseif($p->status == 'konfirmasi')
+                                    {{ 'Barang Sedeng diperjalanan' }}
                                 @else
+                                    {{ $p->status }}
+                                @endif
+                            </td>
+                            <td>
+                                @if ($p->status == 'konfirmasi')
                                     <a href="{{ route('barang_sampai', $p->id_pembayaran) }}" class="btn btn-info">Barang
                                         Sampai</a>
+                                @else
+                                    {{ $p->status }}
                                 @endif
+                            </td>
+                            <td>
+                                <a href="{{ route('detail_pemesanan_saya', $p->id_pembayaran) }}"
+                                    class="btn btn-info ">Detail Pemesanan
+                                    Saya</a>
                             </td>
                         </tr>
                     @endforeach

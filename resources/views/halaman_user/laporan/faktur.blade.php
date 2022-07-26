@@ -134,9 +134,10 @@
 
             <tr align='center'>
                 <td width='20%'>No</td>
-                <td width='20%'>Nama Kurir</td>
-                <td width='20%'>Ongkir</td>
-                <td width='30%'>Nama Barang</td>
+                <td width='10%'>Nama Kurir</td>
+                <td width='15%'>Jenis Ongkir </td>
+                <td width='15%'>Ongkir</td>
+                <td width='27%'>Nama Barang</td>
                 <td width='23%'>Harga Per Barang</td>
                 <td width='14%'>Qty</td>
                 <td width='14%'>Total Harga</td>
@@ -152,18 +153,14 @@
                 <tr align='center'>
                     <td>{{ $loop->iteration }}</td>
                     <td>
-                        @if ($i->nama_kurir != null)
-                            {{ $i->nama_kurir }}
-                        @else
-                            Pesan Tanpa Kurir
-                        @endif
+                        {{ $i->nama_ongkir }}
+                    </td>
+
+                    <td>
+                        {{ $i->description }}
                     </td>
                     <td>
-                        @if ($i->nama_kurir != null)
-                            {{ number_format($i->harga_kurir) }}
-                        @else
-                            Pesan Tanpa Kurir
-                        @endif
+                        {{ number_format($i->value) }}
                     </td>
                     <td>{{ $i->nama_barang }}</td>
                     <td>{{ number_format($i->harga - $i->diskon) }}</td>

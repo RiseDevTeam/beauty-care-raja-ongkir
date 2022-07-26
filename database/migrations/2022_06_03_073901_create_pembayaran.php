@@ -17,7 +17,7 @@ class CreatePembayaran extends Migration
             $table->bigIncrements('id_pembayaran');
             $table->bigInteger('id_user');
             $table->bigInteger('id_persediaan');
-            $table->string('id_kurir')->nullable();
+            $table->string('id_daftar_ongkir');
             $table->string('kode_barang', '30');
             $table->string('dikonfirmasi', '50');
             $table->string('status', '20');

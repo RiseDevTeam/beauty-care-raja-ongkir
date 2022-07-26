@@ -18,7 +18,6 @@ class CreateTableDetailPembayaran extends Migration
             $table->bigInteger('id_pembayaran');
             $table->string('tipe_pembayaran', '30');
             $table->string('bukti_pembayaran', '50')->nullable();
-            $table->string('kota', '100');
             $table->text('alamat');
             $table->bigInteger('kuantiti');
             $table->date('tanggal_pembayaran');

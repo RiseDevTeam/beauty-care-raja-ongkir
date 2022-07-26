@@ -102,6 +102,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::prefix('laporan')->group(function () {
         Route::get('pemesanan_saya', [LaporanController::class, 'pemesanan_saya'])->name('pemesanan_saya');
+        Route::get('detail_pemesanan_saya/{id_pembayaran}', [LaporanController::class, 'detail_pemesanan_saya'])->name('detail_pemesanan_saya');
         Route::get('barang_sampai/{id}', [LaporanController::class, 'barang_sampai'])->name('barang_sampai');
         Route::get('laporan_admin', [LaporanController::class, 'laporan_admin'])->name('laporan_admin');
         Route::get('faktur', [LaporanController::class, 'faktur'])->name('faktur');

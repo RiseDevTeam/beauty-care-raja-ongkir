@@ -74,62 +74,69 @@
                     <div class="card">
                         <!-- /.card-header -->
                         <div class="card-body">
-                            <table class="table table-bordered table-striped">
-                                <thead style="background-color: lightgreen">
-                                    <tr>
-                                        <th scope="col">No</th>
-                                        <th scope="col">Nama User</th>
-                                        <th scope="col">Nama Barang</th>
-                                        <th scope="col">Gambar Barang</th>
-                                        <th scope="col">Alamat</th>
-                                        <th scope="col">Tipe Pembayaran</th>
-                                        <th scope="col">Bukti Pembayaran</th>
-                                        <th scope="col">kota</th>
-                                        <th scope="col">Tanggal Bayar</th>
-                                        {{-- <th scope="col">Nama Kurir</th> --}}
-                                        {{-- <th scope="col">Ongkir</th> --}}
-                                        <th scope="col">Dikonfirmasi</th>
-                                        <th scope="col">Status</th>
-                                        <th scope="col">Jumlah Pembayaran</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php
-                                        $total = 0;
-                                    @endphp
-                                    @foreach ($pay as $p)
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped">
+                                    <thead style="background-color: lightgreen">
                                         <tr>
-                                            <th scope="row">{{ $loop->iteration }}</th>
-                                            <td>{{ $p->user_nama }}</td>
-                                            <td>{{ $p->nm_barang }}</td>
-                                            <td><img src="{{ url('gambar', $p->p_barang) }}" class="img_thumbnail"
-                                                    alt="gambar Produk" width="70"></td>
-                                            <td>{{ $p->alamat }}</td>
-                                            <td>{{ $p->tipe_pembayaran }}</td>
-                                            @if($p->tipe_pembayaran == 'cod')
-                                                <td class="text-center">-</td>
-                                            @else 
-                                                <td><img src="{{ url('gambar', $p->bukti_pembayaran) }}" width="70" --}}
-                                                    alt="Bukti Pembayaran"></td>
-                                            @endif
-                                            <td>{{ $p->kota }}</td>
-                                            <td>{{ $p->tanggal_pembayaran }}</td>
-                                            {{-- <td>{{ $p->nama_kurir }}</td>
-                                            <td>{{ number_format($p->harga_kurir) }}</td> --}}
-                                            <td>{{ $p->dikonfirmasi }}</td>
-                                            <td>{{ $p->status }}</td>
-                                            <td>{{ number_format(($p->harga-$p->diskon)*$p->kuantiti) }}</td>
-                                            @php
-                                                $total += ($p->harga-$p->diskon)*$p->kuantiti;
-                                            @endphp
+                                            <th scope="col">No</th>
+                                            <th scope="col">Nama User</th>
+                                            <th scope="col">Nama Barang</th>
+                                            <th scope="col">Gambar Barang</th>
+                                            <th scope="col">Alamat</th>
+                                            <th scope="col">Tipe Pembayaran</th>
+                                            <th scope="col">Bukti Pembayaran</th>
+                                            <th scope="col">Tanggal Bayar</th>
+                                            <th scope="col">Provinsi</th>
+                                            <th scope="col">kota</th>
+                                            <th scope="col">Nama Kurir</th>
+                                            <th scope="col">Jenis Ongkir</th>
+                                            <th scope="col">Ongkir</th>
+                                            <th scope="col">Dikonfirmasi</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Jumlah Pembayaran</th>
                                         </tr>
-                                    @endforeach
-                                    <tr class="text-danger">
-                                        <td colspan="2" style="font-size:22px"><b> Total : </b></td>
-                                        <td colspan="10" style="text-align:right; font-size:22px"><b>Rp. {{number_format($total)}}</b></td>
-                                    </tr>
-                                    </tfoot>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        @php
+                                            $total = 0;
+                                        @endphp
+                                        @foreach ($pay as $p)
+                                            <tr>
+                                                <th scope="row">{{ $loop->iteration }}</th>
+                                                <td>{{ $p->user_nama }}</td>
+                                                <td>{{ $p->nm_barang }}</td>
+                                                <td><img src="{{ url('gambar', $p->p_barang) }}" class="img_thumbnail"
+                                                        alt="gambar Produk" width="70"></td>
+                                                <td>{{ $p->alamat }}</td>
+                                                <td>{{ $p->tipe_pembayaran }}</td>
+                                                @if ($p->tipe_pembayaran == 'cod')
+                                                    <td class="text-center">-</td>
+                                                @else
+                                                    <td><img src="{{ url('gambar', $p->bukti_pembayaran) }}" width="70"
+                                                            alt="Bukti Pembayaran"></td>
+                                                @endif
+                                                <td>{{ $p->tanggal_pembayaran }}</td>
+                                                <td>{{ $p->provinsi }}</td>
+                                                <td>{{ $p->kota }}</td>
+                                                <td>{{ $p->nama_ongkir }}</td>
+                                                <td>{{ $p->description }}</td>
+                                                <td>{{ number_format($p->value) }}</td>
+                                                <td>{{ $p->dikonfirmasi }}</td>
+                                                <td>{{ $p->status }}</td>
+                                                <td>{{ number_format(($p->harga - $p->diskon) * $p->kuantiti) }}</td>
+                                                @php
+                                                    $total += ($p->harga + $p->value - $p->diskon) * $p->kuantiti;
+                                                @endphp
+                                            </tr>
+                                        @endforeach
+                                        <tr class="text-black">
+                                            <td colspan="2" style="font-size:22px"><b> Total : </b></td>
+                                            <td colspan="10" style="text-align:right; font-size:22px"><b>Rp.
+                                                    {{ number_format($total) }}</b></td>
+                                        </tr>
+                                        </tfoot>
+                                </table>
+                            </div>
                         </div>
                         <!-- /.card-body -->
                     </div>

@@ -15,9 +15,10 @@
 
 <body>
     <div class="container mt-5">
-        <a href="{{ route('proses_pembayaran') }}" class="btn btn-danger">Back</a>
+        <a href="{{ route('proses_pembayaran') }}" class="btn btn-danger"
+            style="margin-top:5px; margin-bottom:5px;">Back</a>
         <table class="table">
-            <thead>
+            <thead style="background-color: salmon;">
                 <tr>
                     <th scope="col">Code</th>
                     <th scope="col">Nama</th>
@@ -34,34 +35,37 @@
                             @csrf
                             <tr>
                                 <th scope="row">{{ $ongkir['code'] }}
-                                    <input type="text" name="code" value="{{ $ongkir['code'] }}">
+                                    <input type="hidden" name="code[]" value="{{ $ongkir['code'] }}">
                                 </th>
                                 <td>{{ $ongkir['name'] }}
-                                    <input type="text" name="nama" value="{{ $ongkir['name'] }}">
+                                    <input type="hidden" name="nama[]" value="{{ $ongkir['name'] }}">
                                 </td>
                                 <td>
                                     {{ $ongkos['service'] }}
-                                    <input type="text" name="service" value="{{ $ongkos['service'] }}">
+                                    <input type="hidden" name="service[]" value="{{ $ongkos['service'] }}">
                                 </td>
                                 <td>
                                     {{ $ongkos['description'] }}
-                                    <input type="text" name="description" value="{{ $ongkos['description'] }}">
+                                    <input type="hidden" name="description[]" value="{{ $ongkos['description'] }}">
                                 </td>
+
                                 @foreach ($ongkos['cost'] as $cost)
                                     <td>{{ $cost['value'] }}
-                                        <input type="text" name="value" value="{{ $cost['value'] }}">
-                                        <input type="submit" name="value">
+                                        <input type="hidden" name="value[]" value="{{ $cost['value'] }}">
                                     </td>
                                 @endforeach
                                 <td>
+                                    <input type="radio" name="layanan[]" value="{{ $ongkos['service'] }}">
                                 </td>
-                                <td></td>
                             </tr>
                         @endforeach
                     @endforeach
-                </form>
+                    <input type="hidden" name="provinsi" value="{{ $provinsi }}">
+                    <input type="hidden" name="kota" value="{{ $kota }}">
             </tbody>
         </table>
+        <button type="submit" name="Simpan" class="btn btn-danger float-right">Kirim</button>
+        </form>
 
     </div>
 

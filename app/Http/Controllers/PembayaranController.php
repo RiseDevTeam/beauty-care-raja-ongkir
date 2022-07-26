@@ -5,15 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\City;
 use Asm89\Stack\Cors;
 use App\Models\Courier;
-use App\Models\DaftarOngkir;
 use App\Models\Province;
 use App\Models\Pemesanan;
 use App\Models\Pembayaran;
+use App\Models\DaftarOngkir;
+use App\Models\DaftarOngkirDraf;
 use Illuminate\Http\Request;
 use App\Models\Detail_Pembayaran;
 use App\Models\Histori_Persediaan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 use Kavist\RajaOngkir\Facades\RajaOngkir;
 
 class PembayaranController extends Controller
@@ -48,38 +50,50 @@ class PembayaranController extends Controller
         foreach ($daftarOngkir as $Ongkir) {
             $ongkir = $Ongkir;
         }
-        return view('halaman_user.pembayaran.cek_harga_ongkir', compact('ongkir', 'daftarOngkir'));
+        $daftarProvinsi = RajaOngkir::provinsi()->find($request->provinsi);
+        $provinsi = $daftarProvinsi['province'];
+
+        $daftarProvinsi = RajaOngkir::kota()->find($request->id_kota);
+        $kota = $daftarProvinsi['city_name'];
+
+        return view('halaman_user.pembayaran.cek_harga_ongkir', compact('ongkir', 'daftarOngkir', 'provinsi', 'kota'));
     }
 
     public function pilih_ongkir(Request $request)
     {
-        dd($request->all());
+        if ($request->layanan = 'OKE') {
+            $insertDaftar = new DaftarOngkirDraf;
+            $insertDaftar->id_user = Auth::User()->id;
+            $insertDaftar->provinsi = $request->provinsi;
+            $insertDaftar->kota = $request->kota;
+            $insertDaftar->code = $request->code[0];
+            $insertDaftar->nama = $request->nama[0];
+            $insertDaftar->service = $request->service[0];
+            $insertDaftar->description = $request->description[0];
+            $insertDaftar->value = $request->value[0];
+            $insertDaftar->save();
+            Alert::success('Data Berhasil', 'Data Berhasil ditambahkan');
+            return redirect()->route('proses_pembayaran');
+        } else {
+            $insertDaftar = new DaftarOngkirDraf;
+            $insertDaftar->id_user = Auth::User()->id;
+            $insertDaftar->provinsi = $request->provinsi;
+            $insertDaftar->kota = $request->kota;
+            $insertDaftar->code = $request->code[1];
+            $insertDaftar->nama = $request->nama[1];
+            $insertDaftar->service = $request->service[1];
+            $insertDaftar->description = $request->description[1];
+            $insertDaftar->value = $request->value[1];
+            $insertDaftar->save();
+            Alert::success('Data Berhasil', 'Data Berhasil ditambahkan');
+            return redirect()->route('proses_pembayaran');
+        }
     }
 
     public function proses_checkout(Request $request)
     {
-
-        $daftarOngkir = RajaOngkir::ongkosKirim([
-            'origin'        => $request->id_kota,     // ID kota/kabupaten asal
-            'destination'   => 80,      // ID kota/kabupaten tujuan
-            'weight'        => 1000,    // berat barang dalam gram
-            'courier'       => $request->id_kurir,    // kode kurir pengiriman: ['jne', 'tiki', 'pos'] untuk starter
-        ])
-            ->get();
-        foreach ($daftarOngkir as $key => $value) {
-            dd($value);
-            $insertDaftar = new DaftarOngkir;
-            $insertDaftar->code = $value['code'];
-            $insertDaftar->nama = $value['name'];
-            foreach ($value['costs'] as $cost) {
-                dd($cost);
-            }
-        }
-
         date_default_timezone_set('Asia/Jakarta');
         $date = date('Y-m-d');
-
-        // // $histori = Histori_Persediaan::->where('')
 
         $pemesanan = Pemesanan::all()->where('id_user', Auth::user()->id);
 
@@ -92,7 +106,7 @@ class PembayaranController extends Controller
             $pembayaran = new Pembayaran;
             $pembayaran->id_user = Auth::user()->id;
             $pembayaran->id_persediaan = $pesan['id_persediaan'];
-            $pembayaran->id_kurir = $id_kurir;
+            $pembayaran->id_daftar_ongkir = $request->id_daftar_ongkir;
             $pembayaran->kode_barang = $pesan['kode_barang'];
             $pembayaran->dikonfirmasi = 'pending';
             $pembayaran->status = 'pending';
@@ -108,7 +122,6 @@ class PembayaranController extends Controller
                     'id_pembayaran' => $id,
                     'tipe_pembayaran' => $request->tipe_pembayaran,
                     'bukti_pembayaran' => '',
-                    'kota' => $request->kota,
                     'alamat' => $request->alamat,
                     'kuantiti' => $pesan['kuantiti'],
                     'tanggal_pembayaran' => $date,
@@ -121,7 +134,6 @@ class PembayaranController extends Controller
                     'id_pembayaran' => $id,
                     'tipe_pembayaran' => $request->tipe_pembayaran,
                     'bukti_pembayaran' => $bukti_nama,
-                    'kota' => $request->kota,
                     'alamat' => $request->alamat,
                     'kuantiti' => $pesan['kuantiti'],
                     'tanggal_pembayaran' => $date,
@@ -132,10 +144,23 @@ class PembayaranController extends Controller
         if ($request->tipe_pembayaran != 'cod') {
             $bukti->move(public_path('gambar'), $bukti_nama);
         }
+        $daftarSementara = DaftarOngkirDraf::where('id_daftar_ongkir', $request->id_daftar_ongkir)->first();
+        DaftarOngkir::create([
+            'id_daftar_ongkir' => $daftarSementara->id_daftar_ongkir,
+            'id_user' => $daftarSementara->id_user,
+            'provinsi' => $daftarSementara->provinsi,
+            'kota' => $daftarSementara->kota,
+            'code' => $daftarSementara->code,
+            'nama' => $daftarSementara->nama,
+            'service' => $daftarSementara->service,
+            'description' => $daftarSementara->description,
+            'value' => $daftarSementara->value,
+        ]);
+        DaftarOngkirDraf::where('id_daftar_ongkir', $request->id_daftar_ongkir)->delete();
 
         $pemesanan = DB::table('pemesanan')->where('id_user', '=', Auth::user()->id)->delete();
 
-        return redirect()->route('pemesanan_saya', compact('daftarOngkir'));
+        return redirect()->route('pemesanan_saya');
     }
 
     public function kelola_pembayaran()
