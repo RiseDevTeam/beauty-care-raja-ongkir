@@ -92,6 +92,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::prefix('pembayaran')->group(function () {
         Route::get('proses_pembayaran', [PembayaranController::class, 'proses_pembayaran'])->name('proses_pembayaran');
+        Route::POST('cek_harga_ongkir', [PembayaranController::class, 'cek_harga_ongkir'])->name('cek_harga_ongkir');
+        Route::POST('pilih_ongkir', [PembayaranController::class, 'pilih_ongkir'])->name('pilih_ongkir');
         Route::POST('proses_checkout', [PembayaranController::class, 'proses_checkout'])->name('proses_checkout');
         Route::get('kelola_pembayaran', [PembayaranController::class, 'kelola_pembayaran'])->name('kelola_pembayaran');
         Route::get('konfirmasi/{id_pembayaran}', [PembayaranController::class, 'konfirmasi'])->name('konfirmasi1');

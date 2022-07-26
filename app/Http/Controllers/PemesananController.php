@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\City;
 use App\Models\Pemesanan;
 use App\Models\Persediaan;
 use Illuminate\Http\Request;
@@ -80,8 +81,7 @@ class PemesananController extends Controller
 
     public function ajax_kota(Request $request)
     {
-        // $daftarKota = RajaOngkir::kota()->find($request->provinsi);
-        $daftarKota = RajaOngkir::kota()->dariProvinsi($request->provinsi)->get();
+        $daftarKota = City::where('province_id', $request->provinsi)->get();
         return response()->json($daftarKota);
     }
 

@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\City;
+use Asm89\Stack\Cors;
 use App\Models\Courier;
+use App\Models\DaftarOngkir;
+use App\Models\Province;
 use App\Models\Pemesanan;
 use App\Models\Pembayaran;
 use Illuminate\Http\Request;
 use App\Models\Detail_Pembayaran;
 use App\Models\Histori_Persediaan;
-use Asm89\Stack\Cors;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Kavist\RajaOngkir\Facades\RajaOngkir;
@@ -17,22 +20,64 @@ class PembayaranController extends Controller
 {
     public function proses_pembayaran()
     {
-        $daftarProvinsi = RajaOngkir::provinsi()->all();
+        // memakai raja ongkir
+        // $daftarProvinsi = RajaOngkir::provinsi()->all();
+
+        // $daftarProvinsi = RajaOngkir::provinsi()->all();
+
+        $daftarProvinsi = Province::all();
+        $daftarkurir = Courier::all();
         $proses = Pemesanan::join('users', 'pemesanan.id_user', '=', 'users.id')->join('persediaan', 'pemesanan.id_persediaan', '=', 'persediaan.id_persediaan')
             ->join('barang', 'pemesanan.kode_barang', '=', 'barang.kode_barang')
             ->select('users.name', 'persediaan.harga', 'persediaan.diskon', 'pemesanan.*')
             ->where('pemesanan.id_user', Auth::user()->id)->get();
         // dd($proses);
 
-        return view('halaman_user.pembayaran.proses_pembayaran', compact('proses', 'daftarProvinsi'));
+        return view('halaman_user.pembayaran.proses_pembayaran', compact('proses', 'daftarProvinsi', 'daftarkurir'));
+    }
+
+    public function cek_harga_ongkir(Request $request)
+    {
+        $daftarOngkir = RajaOngkir::ongkosKirim([
+            'origin'        => $request->id_kota,     // ID kota/kabupaten asal
+            'destination'   => 80,      // ID kota/kabupaten tujuan
+            'weight'        => 1000,    // berat barang dalam gram
+            'courier'       => $request->id_kurir,    // kode kurir pengiriman: ['jne', 'tiki', 'pos'] untuk starter
+        ])
+            ->get();
+        foreach ($daftarOngkir as $Ongkir) {
+            $ongkir = $Ongkir;
+        }
+        return view('halaman_user.pembayaran.cek_harga_ongkir', compact('ongkir', 'daftarOngkir'));
+    }
+
+    public function pilih_ongkir(Request $request)
+    {
+        dd($request->all());
     }
 
     public function proses_checkout(Request $request)
     {
 
+        $daftarOngkir = RajaOngkir::ongkosKirim([
+            'origin'        => $request->id_kota,     // ID kota/kabupaten asal
+            'destination'   => 80,      // ID kota/kabupaten tujuan
+            'weight'        => 1000,    // berat barang dalam gram
+            'courier'       => $request->id_kurir,    // kode kurir pengiriman: ['jne', 'tiki', 'pos'] untuk starter
+        ])
+            ->get();
+        foreach ($daftarOngkir as $key => $value) {
+            dd($value);
+            $insertDaftar = new DaftarOngkir;
+            $insertDaftar->code = $value['code'];
+            $insertDaftar->nama = $value['name'];
+            foreach ($value['costs'] as $cost) {
+                dd($cost);
+            }
+        }
+
         date_default_timezone_set('Asia/Jakarta');
         $date = date('Y-m-d');
-
 
         // // $histori = Histori_Persediaan::->where('')
 
@@ -90,7 +135,7 @@ class PembayaranController extends Controller
 
         $pemesanan = DB::table('pemesanan')->where('id_user', '=', Auth::user()->id)->delete();
 
-        return redirect()->route('pemesanan_saya');
+        return redirect()->route('pemesanan_saya', compact('daftarOngkir'));
     }
 
     public function kelola_pembayaran()

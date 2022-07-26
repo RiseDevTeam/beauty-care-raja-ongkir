@@ -16,7 +16,7 @@ class LocationsTableSeeder extends Seeder
      */
     public function run()
     {
-        $daftarProvinsi = RajaOngkir::provinsi()->get();
+        $daftarProvinsi = RajaOngkir::provinsi()->all();
         foreach ($daftarProvinsi as $provinceRow) {
             Province::create([
                 'province_id' => $provinceRow['province_id'],
