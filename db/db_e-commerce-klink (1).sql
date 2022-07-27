@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 25 Jul 2022 pada 10.38
+-- Waktu pembuatan: 26 Jul 2022 pada 09.08
 -- Versi server: 10.4.11-MariaDB
 -- Versi PHP: 7.4.3
 
@@ -624,6 +624,36 @@ INSERT INTO `couriers` (`id`, `code`, `title`, `created_at`, `updated_at`) VALUE
 
 CREATE TABLE `daftar_ongkir` (
   `id_daftar_ongkir` bigint(20) UNSIGNED NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `provinsi` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `kota` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `code` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nama` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `service` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` bigint(20) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data untuk tabel `daftar_ongkir`
+--
+
+INSERT INTO `daftar_ongkir` (`id_daftar_ongkir`, `id_user`, `provinsi`, `kota`, `code`, `nama`, `service`, `description`, `value`, `created_at`, `updated_at`) VALUES
+(2, 2, 'Sumatera Barat', 'Padang', 'jne', 'Jalur Nugraha Ekakurir (JNE)', 'OKE', 'Ongkos Kirim Ekonomis', 26000, '2022-07-26 05:26:01', '2022-07-26 05:26:01');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `daftar_ongkir_draf`
+--
+
+CREATE TABLE `daftar_ongkir_draf` (
+  `id_daftar_ongkir` bigint(20) UNSIGNED NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `provinsi` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `kota` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   `code` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
   `nama` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `service` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -644,7 +674,6 @@ CREATE TABLE `detail_pembayaran` (
   `id_pembayaran` bigint(20) NOT NULL,
   `tipe_pembayaran` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   `bukti_pembayaran` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `kota` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `alamat` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `kuantiti` bigint(20) NOT NULL,
   `tanggal_pembayaran` date NOT NULL,
@@ -657,15 +686,8 @@ CREATE TABLE `detail_pembayaran` (
 -- Dumping data untuk tabel `detail_pembayaran`
 --
 
-INSERT INTO `detail_pembayaran` (`id_detail_pembayaran`, `id_pembayaran`, `tipe_pembayaran`, `bukti_pembayaran`, `kota`, `alamat`, `kuantiti`, `tanggal_pembayaran`, `total_akhir`, `created_at`, `updated_at`) VALUES
-(1, 1, 'cod', '', 'Kota Padang', 'Padang Kuranji', 3, '2022-06-02', 82000, NULL, NULL),
-(2, 2, 'cod', '', 'Kota Padang', 'Padang Kuranji', 1, '2022-06-02', 82000, NULL, NULL),
-(3, 3, 'transfer', '1656833895.jpg', 'Kota Padang', 'Jati', 2, '2022-07-03', 58000, NULL, NULL),
-(4, 4, 'transfer', '1656833895.jpg', 'Kota Padang', 'Jati', 1, '2022-07-03', 58000, NULL, NULL),
-(5, 5, 'transfer', '1656834475.jpg', 'Luar Kota Padang', 'Bukittinggi', 5, '2022-07-03', 130000, NULL, NULL),
-(6, 6, 'transfer', '1656834475.jpg', 'Luar Kota Padang', 'Bukittinggi', 1, '2022-07-03', 130000, NULL, NULL),
-(7, 8, 'transfer', '1656910817.jpg', 'Kota Padang', 'Mega Permai 1 blok E1 nomor 7', 5, '2022-07-04', 120000, NULL, NULL),
-(8, 9, 'cod', '', 'Kota Padang', 'Kota Padang', 2, '2022-07-22', 30000, NULL, NULL);
+INSERT INTO `detail_pembayaran` (`id_detail_pembayaran`, `id_pembayaran`, `tipe_pembayaran`, `bukti_pembayaran`, `alamat`, `kuantiti`, `tanggal_pembayaran`, `total_akhir`, `created_at`, `updated_at`) VALUES
+(1, 1, 'transfer', '1658813161.jpg', 'Lubuk Buaya', 2, '2022-07-26', 74000, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -740,7 +762,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (15, '2022_07_24_151646_create_provinces_table', 4),
 (16, '2022_07_24_151716_create_cities_table', 4),
 (17, '2022_07_24_151801_create_couriers_table', 4),
-(18, '2022_07_25_075106_create_daftar_ongkir_table', 5);
+(19, '2022_07_25_075106_create_daftar_ongkir_table', 5),
+(20, '2022_07_26_050934_create_daftar_ongkir_draf_table', 6);
 
 -- --------------------------------------------------------
 
@@ -764,7 +787,7 @@ CREATE TABLE `pembayaran` (
   `id_pembayaran` bigint(20) UNSIGNED NOT NULL,
   `id_user` bigint(20) NOT NULL,
   `id_persediaan` bigint(20) NOT NULL,
-  `id_kurir` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id_daftar_ongkir` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `kode_barang` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   `dikonfirmasi` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -776,9 +799,8 @@ CREATE TABLE `pembayaran` (
 -- Dumping data untuk tabel `pembayaran`
 --
 
-INSERT INTO `pembayaran` (`id_pembayaran`, `id_user`, `id_persediaan`, `id_kurir`, `kode_barang`, `dikonfirmasi`, `status`, `created_at`, `updated_at`) VALUES
-(9, 2, 1, '1', 'A001', 'Admin', 'sampai', '2022-07-22 02:54:15', '2022-07-21 20:06:10'),
-(10, 2, 1, '', 'A001', 'pending', 'pending', '2022-07-25 07:45:20', '2022-07-25 07:45:20');
+INSERT INTO `pembayaran` (`id_pembayaran`, `id_user`, `id_persediaan`, `id_daftar_ongkir`, `kode_barang`, `dikonfirmasi`, `status`, `created_at`, `updated_at`) VALUES
+(1, 2, 2, '2', 'A002', 'Admin', 'sampai', '2022-07-26 05:26:01', '2022-07-25 23:15:11');
 
 -- --------------------------------------------------------
 
@@ -802,7 +824,7 @@ CREATE TABLE `pemesanan` (
 --
 
 INSERT INTO `pemesanan` (`id_pemesanan`, `id_user`, `id_persediaan`, `kode_barang`, `kuantiti`, `status`, `created_at`, `updated_at`) VALUES
-(10, 2, 1, 'A001', 2, 'konfirmasi', '2022-07-24 13:24:44', '2022-07-24 13:24:44');
+(13, 2, 1, 'A001', 1, 'konfirmasi', '2022-07-26 05:27:09', '2022-07-26 05:27:09');
 
 -- --------------------------------------------------------
 
@@ -826,8 +848,8 @@ CREATE TABLE `persediaan` (
 --
 
 INSERT INTO `persediaan` (`id_persediaan`, `id_user`, `kode_barang`, `persediaan`, `harga`, `diskon`, `created_at`, `updated_at`) VALUES
-(1, 1, 'A001', 54, 10000, 0, '2022-06-03 09:39:16', '2022-07-24 13:24:44'),
-(2, 1, 'A002', 116, 24000, 0, '2022-06-05 05:34:53', '2022-07-21 17:58:59');
+(1, 1, 'A001', 53, 10000, 0, '2022-06-03 09:39:16', '2022-07-26 05:27:09'),
+(2, 1, 'A002', 112, 24000, 0, '2022-06-05 05:34:53', '2022-07-26 05:24:55');
 
 -- --------------------------------------------------------
 
@@ -946,6 +968,12 @@ ALTER TABLE `daftar_ongkir`
   ADD PRIMARY KEY (`id_daftar_ongkir`);
 
 --
+-- Indeks untuk tabel `daftar_ongkir_draf`
+--
+ALTER TABLE `daftar_ongkir_draf`
+  ADD PRIMARY KEY (`id_daftar_ongkir`);
+
+--
 -- Indeks untuk tabel `detail_pembayaran`
 --
 ALTER TABLE `detail_pembayaran`
@@ -1039,13 +1067,19 @@ ALTER TABLE `couriers`
 -- AUTO_INCREMENT untuk tabel `daftar_ongkir`
 --
 ALTER TABLE `daftar_ongkir`
-  MODIFY `id_daftar_ongkir` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_daftar_ongkir` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT untuk tabel `daftar_ongkir_draf`
+--
+ALTER TABLE `daftar_ongkir_draf`
+  MODIFY `id_daftar_ongkir` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT untuk tabel `detail_pembayaran`
 --
 ALTER TABLE `detail_pembayaran`
-  MODIFY `id_detail_pembayaran` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_detail_pembayaran` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT untuk tabel `failed_jobs`
@@ -1063,19 +1097,19 @@ ALTER TABLE `kurir`
 -- AUTO_INCREMENT untuk tabel `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT untuk tabel `pembayaran`
 --
 ALTER TABLE `pembayaran`
-  MODIFY `id_pembayaran` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_pembayaran` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT untuk tabel `pemesanan`
 --
 ALTER TABLE `pemesanan`
-  MODIFY `id_pemesanan` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_pemesanan` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT untuk tabel `persediaan`

@@ -59,15 +59,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::DELETE('hapus/{id}', [BarangController::class, 'destroy'])->name('barang_hapus');
     });
 
-    Route::prefix('kurir')->group(function () {
-        Route::get('kurir', [KurirController::class, 'index'])->name('kurir');
-        Route::get('tambah', [KurirController::class, 'create'])->name('kurir_tambah');
-        Route::POST('tambah', [KurirController::class, 'store'])->name('kurir_tambah');
-        Route::get('edit/{id}', [KurirController::class, 'edit'])->name('kurir_edit');
-        Route::POST('edit/{id}', [KurirController::class, 'update'])->name('kurir_edit');
-        Route::DELETE('hapus/{id}', [KurirController::class, 'destroy'])->name('kurir_hapus');
-    });
-
     Route::prefix('kelola_persediaan')->group(function () {
         Route::get('persediaan', [PersediaanController::class, 'index'])->name('kelola_persediaan');
         Route::get('tambah', [PersediaanController::class, 'create'])->name('persediaan_tambah');

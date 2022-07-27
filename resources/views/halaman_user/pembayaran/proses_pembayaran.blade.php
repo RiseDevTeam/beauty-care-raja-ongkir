@@ -23,9 +23,8 @@
             <div class="post-ad-form">
                 <table class="table table-bordered">
                     <tr class="text-center">
+                        <td>List</td>
                         <td>Harga Produk</td>
-                        <td>Ongkir</td>
-                        <td>Total Pembayaran</td>
                     </tr>
                     <tr class="text-center">
                         @php
@@ -38,23 +37,8 @@
                                 $grandtotal += $total;
                             @endphp
                         @endforeach
+                        <td>1.</td>
                         <td id="total_harga">Rp {{ number_format($grandtotal) }}</td>
-                        @php
-                            $ongkir = DB::table('daftar_ongkir_draf')
-                                ->where('id_user', Auth::User()->id)
-                                ->orderBy('id_daftar_ongkir', 'desc')
-                                ->first();
-                        @endphp
-                        <td>
-                            @if ($ongkir)
-                                Rp.{{ number_format($ongkir->value) }}
-                            @endif
-                        </td>
-                        <td>
-                            @if ($ongkir)
-                                Rp {{ number_format($grandtotal + $ongkir->value) }}
-                            @endif
-                        </td>
                     </tr>
                 </table>
                 <div class="personal-details" style="margin-bottom: 40px">
@@ -87,6 +71,31 @@
                         <br>
                         <button type="submit", class="btn btn-primary">Proses Harga Ongkir</button>
                     </form>
+                    <br>
+                    <table class="table table-bordered">
+                        @php
+                            $ongkir = DB::table('daftar_ongkir_draf')
+                                ->where('id_user', Auth::User()->id)
+                                ->orderBy('id_daftar_ongkir', 'desc')
+                                ->first();
+                        @endphp
+                        <tr class="text-center">
+                            <td>Ongkir</td>
+                            <td>Total Pembayaran</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td>
+                                @if ($ongkir)
+                                    Rp.{{ number_format($ongkir->value) }}
+                                @endif
+                            </td>
+                            <td>
+                                @if ($ongkir)
+                                    Rp {{ number_format($grandtotal + $ongkir->value) }}
+                                @endif
+                            </td>
+                        </tr>
+                    </table>
                     <form action="{{ route('proses_checkout') }}" method="POST" enctype="multipart/form-data">
                         <label for="alamat">Alamat Lengkap <span>*</span></label>
                         @csrf
