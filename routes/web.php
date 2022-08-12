@@ -35,6 +35,7 @@ Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('admin', [AuthController::class, 'admin'])->name('admin');
+    Route::get('pemilik', [AuthController::class, 'pemilik'])->name('pemilik');
     Route::get('karyawan', [AuthController::class, 'karyawan'])->name('karyawan');
     Route::get('user', [AuthController::class, 'user'])->name('user');
     Route::POST('logout', [AuthController::class, 'logout'])->name('logout');

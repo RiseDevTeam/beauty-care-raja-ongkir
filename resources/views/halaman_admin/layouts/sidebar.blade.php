@@ -79,6 +79,17 @@
              </li>
          @endif
 
+         @if (Auth::user()->status == 'pemilik')
+             <li class="nav-item">
+                 <a href="{{ route('laporan_admin') }}" class="nav-link">
+                     <i class="fas fa-book ml-2 mr-2"></i>
+                     <p>
+                         Laporan
+                     </p>
+                 </a>
+             </li>
+         @endif
+
          @if (Auth::user()->status == 'karyawan')
              <li class="nav-item has-treeview">
                  <a href="{{ route('dashboard') }}" class="nav-link">

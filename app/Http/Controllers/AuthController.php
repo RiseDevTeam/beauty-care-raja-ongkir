@@ -53,6 +53,8 @@ class AuthController extends Controller
 
             if ($login->status == 'admin') {
                 return redirect()->intended('admin');
+            } elseif ($login->status == 'pemilik') {
+                return redirect()->intended('pemilik');
             } elseif ($login->status == 'karyawan') {
                 return redirect()->intended('karyawan');
             } elseif ($login->status == 'user') {
@@ -70,6 +72,16 @@ class AuthController extends Controller
     public function admin()
     {
         if (Auth::user()->status == 'admin') {
+
+            return view('halaman_admin.dashboard.dashboard');
+        } else {
+            return redirect()->route('/');
+        }
+    }
+
+    public function pemilik()
+    {
+        if (Auth::user()->status == 'pemilik') {
 
             return view('halaman_admin.dashboard.dashboard');
         } else {
