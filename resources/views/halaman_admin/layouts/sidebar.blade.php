@@ -43,15 +43,6 @@
              </li>
 
              <li class="nav-item">
-                 <a href="{{ route('kurir') }}" class="nav-link">
-                     <i class="fas fa-people-carry ml-1 mr-2"></i>
-                     <p>
-                         Kelola Kurir
-                     </p>
-                 </a>
-             </li>
-
-             <li class="nav-item">
                  <a href="{{ route('kelola_pemesanan') }}" class="nav-link">
                      <i class="nav-icon fas fa-copy"></i>
                      <p>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 26 Jul 2022 pada 09.08
+-- Waktu pembuatan: 14 Agu 2022 pada 16.10
 -- Versi server: 10.4.11-MariaDB
 -- Versi PHP: 7.4.3
 
@@ -44,7 +44,8 @@ CREATE TABLE `alamat` (
 INSERT INTO `alamat` (`id_alamat`, `username`, `alamat`, `no_hp`, `created_at`, `updated_at`) VALUES
 (2, 'pelanggan', 'Lubuk Basung, Kabupaten Agam', '08123456776', '2022-06-03 09:40:02', '2022-06-03 09:40:02'),
 (3, 'karyawan', 'Padang', '085261044403', '2022-06-05 05:35:52', '2022-06-05 05:35:52'),
-(4, 'admin', 'kota padang', '0812345678', NULL, NULL);
+(4, 'admin', 'kota padang', '0812345678', NULL, NULL),
+(6, 'pemilik', 'kota padang', '0812345678', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -62,14 +63,6 @@ CREATE TABLE `barang` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data untuk tabel `barang`
---
-
-INSERT INTO `barang` (`id_barang`, `id_user`, `kode_barang`, `nama_barang`, `gambar`, `deskripsi`, `created_at`, `updated_at`) VALUES
-(3, 1, 'A001', 'DSO', '1654788074.jpg', 'Perhitungan DSO tersebut dengan cara membagi total piutang selama jangka waktu dengan total penjualan kredit bersih. Hasil perhitungan tersebut akan dikalikan dengan jumlah hari pada periode tersebut. Selain itu pengukuran DSO ini memiliki jangka waktu secara bulanan, tahunan, maupun triwulan. Apabila hasil days sales outstanding rendah maka bisnis Anda hanya perlu beberapa hari menagih piutangnya.', '2022-06-09 08:21:14', '2022-06-09 08:21:58'),
-(4, 1, 'A002', 'Whitening kety', '1654788179.jpg', 'Cipher FEAL (diikuti oleh Khufu dan Khafre ) memperkenalkan praktik pemutihan kunci menggunakan bagian dari kunci yang sama yang digunakan di sisa cipher. Ini tidak menawarkan perlindungan tambahan dari serangan brute force, tetapi dapat membuat serangan lain lebih sulit. Dalam cipher Feistel atau algoritme serupa, pemutihan kunci dapat meningkatkan keamanan dengan menyembunyikan input spesifik ke fungsi putaran pertama dan terakhir. Secara khusus, itu tidak rentan terhadap serangan meet-in-the-middle . Bentuk pemutihan kunci ini telah diadopsi sebagai fitur dari banyak sandi blok kemudian, termasuk AES , MARS , RC6 , dan Twofish .', '2022-06-09 08:22:59', '2022-06-09 08:22:59');
 
 -- --------------------------------------------------------
 
@@ -636,13 +629,6 @@ CREATE TABLE `daftar_ongkir` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data untuk tabel `daftar_ongkir`
---
-
-INSERT INTO `daftar_ongkir` (`id_daftar_ongkir`, `id_user`, `provinsi`, `kota`, `code`, `nama`, `service`, `description`, `value`, `created_at`, `updated_at`) VALUES
-(2, 2, 'Sumatera Barat', 'Padang', 'jne', 'Jalur Nugraha Ekakurir (JNE)', 'OKE', 'Ongkos Kirim Ekonomis', 26000, '2022-07-26 05:26:01', '2022-07-26 05:26:01');
-
 -- --------------------------------------------------------
 
 --
@@ -682,13 +668,6 @@ CREATE TABLE `detail_pembayaran` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data untuk tabel `detail_pembayaran`
---
-
-INSERT INTO `detail_pembayaran` (`id_detail_pembayaran`, `id_pembayaran`, `tipe_pembayaran`, `bukti_pembayaran`, `alamat`, `kuantiti`, `tanggal_pembayaran`, `total_akhir`, `created_at`, `updated_at`) VALUES
-(1, 1, 'transfer', '1658813161.jpg', 'Lubuk Buaya', 2, '2022-07-26', 74000, NULL, NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -704,29 +683,6 @@ CREATE TABLE `failed_jobs` (
   `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `kurir`
---
-
-CREATE TABLE `kurir` (
-  `id_kurir` bigint(20) UNSIGNED NOT NULL,
-  `nama_kurir` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `harga` bigint(20) NOT NULL,
-  `wilayah` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data untuk tabel `kurir`
---
-
-INSERT INTO `kurir` (`id_kurir`, `nama_kurir`, `harga`, `wilayah`, `created_at`, `updated_at`) VALUES
-(1, 'JNE', 10000, 'Kota Padang', '2022-07-21 18:14:06', '2022-07-21 18:14:06'),
-(2, 'JNE', 30000, 'Luar Kota Padang', '2022-07-21 18:14:25', '2022-07-21 18:14:25');
 
 -- --------------------------------------------------------
 
@@ -795,13 +751,6 @@ CREATE TABLE `pembayaran` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='14';
 
---
--- Dumping data untuk tabel `pembayaran`
---
-
-INSERT INTO `pembayaran` (`id_pembayaran`, `id_user`, `id_persediaan`, `id_daftar_ongkir`, `kode_barang`, `dikonfirmasi`, `status`, `created_at`, `updated_at`) VALUES
-(1, 2, 2, '2', 'A002', 'Admin', 'sampai', '2022-07-26 05:26:01', '2022-07-25 23:15:11');
-
 -- --------------------------------------------------------
 
 --
@@ -819,13 +768,6 @@ CREATE TABLE `pemesanan` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data untuk tabel `pemesanan`
---
-
-INSERT INTO `pemesanan` (`id_pemesanan`, `id_user`, `id_persediaan`, `kode_barang`, `kuantiti`, `status`, `created_at`, `updated_at`) VALUES
-(13, 2, 1, 'A001', 1, 'konfirmasi', '2022-07-26 05:27:09', '2022-07-26 05:27:09');
-
 -- --------------------------------------------------------
 
 --
@@ -842,14 +784,6 @@ CREATE TABLE `persediaan` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data untuk tabel `persediaan`
---
-
-INSERT INTO `persediaan` (`id_persediaan`, `id_user`, `kode_barang`, `persediaan`, `harga`, `diskon`, `created_at`, `updated_at`) VALUES
-(1, 1, 'A001', 53, 10000, 0, '2022-06-03 09:39:16', '2022-07-26 05:27:09'),
-(2, 1, 'A002', 112, 24000, 0, '2022-06-05 05:34:53', '2022-07-26 05:24:55');
 
 -- --------------------------------------------------------
 
@@ -931,7 +865,8 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `name`, `username`, `email_verified_at`, `password`, `foto`, `status`, `remember_token`, `created_at`, `updated_at`) VALUES
 (2, 'Pelanggan', 'pelanggan', NULL, '$2y$10$XRPLloOv0Pov/P19nCxUP.reOP5yoInvZJCFr93I5995THRlQ1gAi', 'admin.jpg', 'user', NULL, '2022-06-03 09:40:02', '2022-06-03 09:40:02'),
 (3, 'karyawan', 'karyawan', NULL, '$2y$10$o7MHjmHRx.56ltnwRda74O0eANTMMOLVMcrVnOT180JSIVHffxVgy', 'admin.jpg', 'karyawan', NULL, '2022-06-05 05:35:52', '2022-06-05 05:35:52'),
-(5, 'Admin', 'admin', NULL, '$2y$10$p.iX68qL3ipj3/8mvkaHLuvos3pGZnJH3ESVuv5X8cYZSEIx6bpn.', 'admin.jpg', 'admin', NULL, NULL, NULL);
+(5, 'Admin', 'admin', NULL, '$2y$10$p.iX68qL3ipj3/8mvkaHLuvos3pGZnJH3ESVuv5X8cYZSEIx6bpn.', 'admin.jpg', 'admin', NULL, NULL, NULL),
+(7, 'Pemilik', 'pemilik', NULL, '$2y$10$tjFxjY6jt8CUmC.tsPihze5otYp/r.6ANbWaV.grtmXMuFiag4kmG', 'admin.jpg', 'pemilik', NULL, NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -987,12 +922,6 @@ ALTER TABLE `failed_jobs`
   ADD UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`);
 
 --
--- Indeks untuk tabel `kurir`
---
-ALTER TABLE `kurir`
-  ADD PRIMARY KEY (`id_kurir`);
-
---
 -- Indeks untuk tabel `migrations`
 --
 ALTER TABLE `migrations`
@@ -1043,13 +972,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT untuk tabel `alamat`
 --
 ALTER TABLE `alamat`
-  MODIFY `id_alamat` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_alamat` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT untuk tabel `barang`
 --
 ALTER TABLE `barang`
-  MODIFY `id_barang` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_barang` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `cities`
@@ -1067,31 +996,25 @@ ALTER TABLE `couriers`
 -- AUTO_INCREMENT untuk tabel `daftar_ongkir`
 --
 ALTER TABLE `daftar_ongkir`
-  MODIFY `id_daftar_ongkir` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_daftar_ongkir` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `daftar_ongkir_draf`
 --
 ALTER TABLE `daftar_ongkir_draf`
-  MODIFY `id_daftar_ongkir` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_daftar_ongkir` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `detail_pembayaran`
 --
 ALTER TABLE `detail_pembayaran`
-  MODIFY `id_detail_pembayaran` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_detail_pembayaran` int(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT untuk tabel `kurir`
---
-ALTER TABLE `kurir`
-  MODIFY `id_kurir` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT untuk tabel `migrations`
@@ -1103,19 +1026,19 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT untuk tabel `pembayaran`
 --
 ALTER TABLE `pembayaran`
-  MODIFY `id_pembayaran` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_pembayaran` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `pemesanan`
 --
 ALTER TABLE `pemesanan`
-  MODIFY `id_pemesanan` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id_pemesanan` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `persediaan`
 --
 ALTER TABLE `persediaan`
-  MODIFY `id_persediaan` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_persediaan` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `provinces`
@@ -1127,7 +1050,7 @@ ALTER TABLE `provinces`
 -- AUTO_INCREMENT untuk tabel `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
