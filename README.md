@@ -7,6 +7,16 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+## pada e-commerce beauty care padang
+
+<p> Aplikasi ini memakai raja ongkir untuk ongkir nya, jadi kita harus memakai API raja ongkir, untuk langkah-langkah nya sudah di buat di bawah ini </p>
+
+<p> Untuk analisa aplikasi bisa lihat di folder BAB </p>
+
+<p> Untuk pemakaian aplikasi bisa clone aplikasi ini, buat file .env lalu copy kan data nya dari .env.example dan terakhir silahkan install composer nya </p>
+
+<p> Aplikasi ini berfokus untuk penjualan barang cosmetik </p>
+
 ## About e-beauty-caru pakai raja ongkir
 
 <p> <h2> Syarat-syarat untuk install API raja Ongkir di sistem </h2> </p>
@@ -14,9 +24,3 @@
 <p> 2. bisa bisa lihat tutorial install nya </p>
 <p> 3. yg ada kodingan API raja ongkir nya, PemesananController dan PembayaranController </p>
 <p> 4. untuk seetingan sudah selesai </p>
-
-## Masih Kurang e-beauty-caru pakai raja ongkir
-
-<p> 1. Menampilkan Harga di API </p>
-<p> 2. memasukannya provinsi,kota dan harga ke database </p>
-<p> 3. faktur di ubah seperti biasa lagi, seperti sebelum revisi kemaren </p>
